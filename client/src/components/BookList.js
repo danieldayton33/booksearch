@@ -15,7 +15,7 @@ const BookList = ({books, handleSave}) => {
     return (
           <Grid item xs={12}>
             <Grid container className="book-list" justify="center" spacing={16}>
-              {(books.length > 1) ? (books.map((book, index) => (
+              {(books.length) ? (books.map((book, index) => (
                    <Grid item xs={3}>
                     <BookCard 
                       title = {book.title}

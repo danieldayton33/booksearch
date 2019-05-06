@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Jumbotron from '../components/JumboTron';
 import BookList from "../components/BookList";
-import SearchBar from '../components/SearchBar';
 import API from '../utils/API';
 import Grid from '@material-ui/core/Grid';
 
@@ -23,54 +22,54 @@ const styles = theme => ({
 
 class Saved extends Component {
   state = {
-    search: '',
     books: [],
-    searchType: 'book'
   };
   componentDidMount () {
+   this.getBooks()
+  }
+ 
+  getBooks = () => {
     API.getAllSaved({})
     .then(result => {
+      console.log("RESULT", result)
       this.displayResult(result)
     })
     .catch(err => {
       console.log(err);
     })
   }
-  searchType = (type) => {
-    this.setState({searchType: type})
-  }
-  handleChange = (e) => {
-    const {name, value} = e.target
-    this.setState({
-      [name]: value,
-    });
-  };
+
   displayResult = (result) => {
     console.log(result);
-      const books = result.data.items
+      const books = result.data
       const bookArray = []
       books.forEach(book => {
         console.log('book:',book);
-        const title = (book.volumeInfo.title) ? (book.volumeInfo.title): ("");
-        const image = (book.volumeInfo.imageLinks && book.volumeInfo.imageLinks.thumbnail) ? (book.volumeInfo.imageLinks.thumbnail): ("");
-        const description = (book.volumeInfo.description) ? (book.volumeInfo.description): ("");
-        const author = (book.volumeInfo.authors[0]) ? (book.volumeInfo.authors[0]): ("");
-        const category = (book.volumeInfo.category) ? (book.volumeInfo.category): ("");
-        const link = (book.volumeInfo.infoLink) ? (book.volumeInfo.infoLink) : ("");
-        const snippet = (book.searchInfo && book.searchInfo.textSnippet) ? (book.searchInfo.textSnippet): ("");
-        bookArray.push({title,snippet,image,description,author,category,link})
+        const title = (book.title) ? (book.title): ("");
+        const image = (book.image) ? (book.image): ("");
+        const description = (book.description) ? (book.description): ("");
+        const author = (book.author) ? (book.author): ("");
+        const id = (book._id) ? (book._id): ("");
+        const link = (book.link) ? (book.link) : ("");
+        const snippet = (book.snippet) ? (book.snippet): ("");
+        bookArray.push({title,snippet,image,description,author,id,link})
       }
         )
       this.setState({
-        search: "",
         books: bookArray
       });
       console.log("STATE API", this.state);
   }
 
 
-  handleUnSave = (id) => {
-
+  handleSave = (index) => {
+    console.log("INDEX", index)
+    API.removeSaved(this.state.books[index].id)
+    .then(result => {
+      console.log(result)
+      this.getBooks();
+    })
+    .catch(err => console.log(err))
   }
 
   render() {
@@ -83,7 +82,7 @@ class Saved extends Component {
        <Jumbotron />
     </Grid>
     <Grid container className={classes.root} justify="center" spacing={40}>
-      <BookList books={this.state.books} />
+      <BookList books={this.state.books} handleSave={this.handleSave} />
     </Grid>
    
     </div>

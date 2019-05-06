@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import classnames from 'classnames';
@@ -13,10 +13,12 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import red from '@material-ui/core/colors/red';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import Grid from '@material-ui/core/Grid';
+import Snackbar from '@material-ui/core/Snackbar';
+import Button from '@material-ui/core/Button';
+import CloseIcon from '@material-ui/icons/Close';
+
 
 const styles = theme => ({
   root: {
@@ -49,17 +51,29 @@ const styles = theme => ({
   },
 });
 
-class BookCard extends React.Component {
-  state = { expanded: false };
+const BookCard = ({classes, title, image, link, index, snippet, author, description, handleSave}) => {
+ const[state, handleClose]  = useState({ 
+    expanded: false,
+    open: false
+   });
 
-  handleExpandClick = () => {
-    this.setState(state => ({ expanded: !state.expanded }));
+  const handleExpandClick = () => {
+    handleClose(state => ({ ...state, expanded: !state.expanded }));
   };
 
-  render() {
-    const { classes, title, image, link, index, snippet, author, description, handleSave, handleUnSave } = this.props;
-    console.log(index);
+  const handleCloseSnackBar = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      handleClose({ ...state, open: !state.open });
+    };
+
+  const handleSaveSnackBar = (index) => {
+    handleSave(index);
+    handleClose(state => ({...state, open: !state.open}))
+  }
     return (
+      <div>
       <Card className={classes.card}>
         <CardHeader
           avatar={
@@ -86,22 +100,21 @@ class BookCard extends React.Component {
           </Typography>
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
-          <IconButton aria-label="Add to favorites" onClick={
-            (window.location.pathname === "/")? (()=> handleSave(index)): (()=>handleUnSave(index))}>
+          <IconButton aria-label="Add to favorites" onClick={()=> handleSaveSnackBar(index)}>
             <FavoriteIcon />
           </IconButton>
           <IconButton
             className={classnames(classes.expand, {
-              [classes.expandOpen]: this.state.expanded,
+              [classes.expandOpen]: state.expanded,
             })}
-            onClick={this.handleExpandClick}
-            aria-expanded={this.state.expanded}
+            onClick={handleExpandClick}
+            aria-expanded={state.expanded}
             aria-label="Show more"
           >
             <ExpandMoreIcon />
           </IconButton>
         </CardActions>
-        <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
+        <Collapse in={state.expanded} timeout="auto" unmountOnExit>
           <CardContent>
             <Typography paragraph>Description:</Typography>
             <Typography paragraph>
@@ -110,8 +123,35 @@ class BookCard extends React.Component {
           </CardContent>
         </Collapse>
       </Card>
+      <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          open={state.open}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackBar}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">{(window.location.pathname === "/saved") ? ("Book Unsaved") : ("Book Saved")}</span>}
+          action={[
+            <Button key="undo" color="secondary" size="small" onClick={handleCloseSnackBar}>
+              UNDO
+            </Button>,
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="inherit"
+              className={classes.close}
+              onClick={handleCloseSnackBar}
+            >
+              <CloseIcon />
+            </IconButton>,
+          ]}
+        />
+        </div>
     );
-  }
 }
 
 Card.propTypes = {

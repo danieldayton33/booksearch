@@ -15,7 +15,7 @@ const BookSchema = new Schema ({
         type: String,
         required: true
     },
-    imageSrc: {
+    image: {
         type: String,
         default: "https://via.placeholder.com/200"
     },
@@ -23,9 +23,13 @@ const BookSchema = new Schema ({
         type: String,
         required: true
     },
-    saved: {
-        type: Boolean,
-        default: false
+    snippet: {
+        type: String,
+        default: "No Description Available"
+    },
+    id: {
+        type: String,
+        required: true
     }
 })
 

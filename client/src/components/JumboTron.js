@@ -4,7 +4,7 @@ import Paper from '@material-ui/core/Paper';
 
 const Jumbotron = () => {
     return (
-<Grid container>
+<Grid container position="static">
     <Grid item lg={12}>
         <Paper elevation={10}>
         <Grid container justify="center">

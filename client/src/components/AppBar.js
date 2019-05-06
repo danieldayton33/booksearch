@@ -30,9 +30,9 @@ function ButtonAppBar(props) {
         <Toolbar>
           <Button href="/" color="inherit">Search</Button>
           <Button href="/saved" color="inherit">Saved</Button>
-          <Typography variant="h6" color="inherit" className={classes.grow}>
+          {/* <Typography variant="h6" color="inherit" className={classes.grow}>
             News
-          </Typography>
+          </Typography> */}
          
         </Toolbar>
       </AppBar>

@@ -8,12 +8,12 @@ export default {
         return axios.get(` https://www.googleapis.com/books/v1/volumes?q=inauthor:${search}&key=AIzaSyDL5UOZPeGCE18MiMTLJFxvF_bIUxmpTzY`)
     },
     getAllSaved: function() {
-        return axios.get("/")
+        return axios.get("/api/books")
     },
     removeSaved: function(id) {
-        return axios.delete(`/${id}`)
+        return axios.delete(`/api/books/${id}`)
     },
     saveBook: function(book) {
-        return axios.post('/',book)
+        return axios.post('/api/books',book)
     }
 }
