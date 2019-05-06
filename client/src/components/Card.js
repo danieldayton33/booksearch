@@ -82,7 +82,7 @@ const BookCard = ({classes, title, image, link, index, snippet, author, descript
             </Avatar>
           }
           action={
-            <IconButton  linkButton={true} href={link}>
+            <IconButton  linkButton={true} href={link} target="_blank">
               <MoreVertIcon />
             </IconButton>
           }
