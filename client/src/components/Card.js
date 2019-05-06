@@ -134,7 +134,7 @@ const BookCard = ({classes, title, image, link, index, snippet, author, descript
           ContentProps={{
             'aria-describedby': 'message-id',
           }}
-          message={<span id="message-id">{(window.location.pathname === "/saved") ? ("Book Unsaved") : ("Book Saved")}</span>}
+          message={<span id="message-id">{(window.location.pathname === "/saved") ? (`"${title}" Unsaved`) : (`"${title}" Saved`)}</span>}
           action={[
             <Button key="undo" color="secondary" size="small" onClick={handleCloseSnackBar}>
               UNDO
