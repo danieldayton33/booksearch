@@ -9,6 +9,7 @@ import purple from '@material-ui/core/colors/purple';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 
+
 const styles = theme => ({
     colorSwitchBase: {
       color: purple[300],
@@ -53,13 +54,14 @@ const SearchBar =(props)=> {
                 <Paper className="search-area" elevation={2} >
                     <Grid container justify="center">
                         <Grid item xs={6}>
+                            <form onSubmit={handleClick}>
                             <Input 
                                 placeholder={state.checkedA ? ("Authors Name"): ("Book Title")}
                                 value={search}
                                 name="search"
                                 onChange={(e)=> handleChange(e)}
                             />
-                            <FormGroup row>
+                              <FormGroup row>
                                 <FormControlLabel
                                 control={
                                     <Switch
@@ -77,7 +79,9 @@ const SearchBar =(props)=> {
                                 }
                                 label={state.checkedA ? ("Author"): ("Title")}
                                 />
-                            </FormGroup>
+
+                              </FormGroup>
+                            </form>
                         </Grid>
                         <Grid item xs={6}>
                         <Button
